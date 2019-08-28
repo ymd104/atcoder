@@ -4,8 +4,11 @@ using namespace std;
 
 
 void solve(){
-    vector<int> a;
-    cout << pow(2,3) << endl;
+    int a;
+    string s;
+    cin >> a >> s;
+    if(a>=3200) {cout << s << endl;}
+    else {cout << "red" << endl;}
 }
 
 int main(){
