@@ -22,7 +22,7 @@ void solve(){
             ans = m/i;
             break;
         }
-    }
+    } 
     cout << ans << endl;
 }
 
