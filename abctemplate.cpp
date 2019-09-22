@@ -5,59 +5,79 @@ typedef long long ll;
 typedef long long unsigned int llu;
 ll mod = 1000000007;
 
-/*
-ll dp[3010][3010];
- 
-ll lcs(string s, string t){
-    int n,m;
-    n = s.size();
-    m = t.size();
-    rep(i,n+1){
-        dp[i][0] = 0;
-    }
-    rep(j,m+1){
-        dp[0][j] = 0;
-    }
- 
- 
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            if(s[i-1]==t[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
-            else if(dp[i-1][j] > dp[i][j-1]) dp[i][j]=dp[i-1][j];
-            else dp[i][j]=dp[i][j-1]; 
-        }
-    }
-    return dp[n][m];
-}
-*/
 
-ll dp[5010][5010];
 
 void solve(){
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    rep(i,n){
-      dp[i][0]=0;
-      dp[0][i]=0;
+  int n,k;
+  cin >> n >> k;
+  int p[n+10];
+  vector<int> rev;
+  bool b[n+10];
+  rep(i,n){
+    cin >> p[i];
+    b[i]=false;
+  }
+  for(int i=1; i<n; i++){
+    if(p[i-1]>p[i]) {
+      rev.emplace_back(i-1);
+      b[i-1] = true;
     }
-    for(int i=1; i<=n; i++){
-      for(int j=1; j<=n; j++){
-        if(i>=j) dp[i][j]=0;
-        else if(s[i-1]==s[j-1] && i + dp[i-1][j-1]<j) dp[i][j] = dp[i-1][j-1]+1;
-        else dp[i][j]=0;
+  }
+  b[n] = false;
 
-        //cout << i << " " << j << " " << dp[i][j] << endl;
+  ll count=1;
+  int bnum=0;
+  int l=0;
+  int r=k-1;
+  bool tmp=false;
+  rep(i,r){
+    if(b[i]==true){
+      tmp=true;
+      bnum++;
+    }
+  }
+  //if(tmp) count++;
+  int flag=0;
+  if(bnum==0) flag=1;
+  int flag2 = 0;
+  while(r<n){
+    r++;
+    l++;
+    cout << l << ", " << r << " -> ";
+    if(b[r-1]==true && b[l-1]==true) {
+      count++;
+      cout << "1" << endl;
+    }
+    else if(b[r-1]==true){
+      count++;
+      cout << "2" << endl;
+      bnum = bnum+1;
+    }
+    else if(b[l-1]==true){
+      count++;
+      cout << "3" << endl;
+      bnum = bnum-1;
+    }
+    else {
+      cout << "4" << endl;
+      flag2= 1;
+    }
+    if(bnum==0){
+      if(flag==1){
+        if(flag2==0)count--;
+      }
+      else{
+        flag=1;
       }
     }
-    ll ma = 0;
-    rep(i,n){
-      rep(j,n){
-        ma = max(ma, dp[i+1][j+1]);
-      }
-    }
-    cout << ma << endl;
+
+    flag2=0;
+    cout << "----------" << count << endl;
+    
+  }
+  ll t = max(count,(ll)1);
+  cout << t << endl;
+
 }
 
 int main(){
