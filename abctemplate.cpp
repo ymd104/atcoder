@@ -3,80 +3,87 @@ using namespace std;
 #define rep(i,n) for(ll i=0; i<n; i++)
 typedef long long ll;
 typedef long long unsigned int llu;
-ll mod = 1000000007;
-
-
+ll MOD = 1000000007;
+ll INF = 1000000009;
 
 void solve(){
-  int n,k;
-  cin >> n >> k;
-  int p[n+10];
-  vector<int> rev;
-  bool b[n+10];
+  ll n,m;
+  cin >> n >> m;
+  vector<pair<ll, vector<ll>>> v;
+  vector<pair<long double,ll>> vt;
+  rep(i,m){
+    ll a;
+    ll b;
+    cin >> a >> b;
+    vector<ll> vec;
+    rep(i,b){
+      ll c;
+      cin >> c;
+      vec.emplace_back(c);
+    }
+    long double t1,t2;
+    t1 = (long double)a;
+    t2 = (long double)b;
+    v.emplace_back(make_pair(a, vec));
+    vt.emplace_back(make_pair(t1/t2,i));
+  }
+
+  ll count[n+10];
   rep(i,n){
-    cin >> p[i];
-    b[i]=false;
+    count[i]=0;
   }
-  for(int i=1; i<n; i++){
-    if(p[i-1]>p[i]) {
-      rev.emplace_back(i-1);
-      b[i-1] = true;
+  
+  rep(i,m){
+    vector<ll> ve = v[i].second;
+    ll n = ve.size();
+    rep(j,n){
+      count[ve[j]-1]++;
     }
   }
-  b[n] = false;
 
-  ll count=1;
-  int bnum=0;
-  int l=0;
-  int r=k-1;
-  bool tmp=false;
-  rep(i,r){
-    if(b[i]==true){
-      tmp=true;
-      bnum++;
+  bool t = true;
+    rep(j,n){
+      if(count[j]==0) t=false;
     }
+  
+  //sort(v.begin(),v.end(), greater<int>());
+  sort(vt.begin(),vt.end());
+  reverse(vt.begin(),vt.end());
+  //cout << vt[0].first  << endl;
+  //cout << count[0] << count[1] << endl;
+
+  ll sum = 0;
+  rep(i,m){
+    ll tmp = vt[i].second;
+    sum += v[tmp].first;
   }
-  //if(tmp) count++;
-  int flag=0;
-  if(bnum==0) flag=1;
-  int flag2 = 0;
-  while(r<n){
-    r++;
-    l++;
-    cout << l << ", " << r << " -> ";
-    if(b[r-1]==true && b[l-1]==true) {
-      count++;
-      cout << "1" << endl;
-    }
-    else if(b[r-1]==true){
-      count++;
-      cout << "2" << endl;
-      bnum = bnum+1;
-    }
-    else if(b[l-1]==true){
-      count++;
-      cout << "3" << endl;
-      bnum = bnum-1;
-    }
-    else {
-      cout << "4" << endl;
-      flag2= 1;
-    }
-    if(bnum==0){
-      if(flag==1){
-        if(flag2==0)count--;
-      }
-      else{
-        flag=1;
+  rep(i,m){
+    ll tmp = vt[i].second;
+    bool b=true;
+    vector<ll> ve = v[tmp].second;
+    ll n=ve.size();
+    rep(j,n){
+      if(count[ve[j]-1]<=1){
+        b = false;
       }
     }
-
-    flag2=0;
-    cout << "----------" << count << endl;
+    if(b) {
+      sum = sum - v[tmp].first;
+      rep(j,n){
+        count[ve[j]-1]--;
+      }
+    }
+    
+    
+    if(!t){
+      sum = -1;
+      break;
+    }
     
   }
-  ll t = max(count,(ll)1);
-  cout << t << endl;
+
+  cout << sum << endl;
+
 
 }
 
