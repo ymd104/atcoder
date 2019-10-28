@@ -7,10 +7,10 @@ ll MOD = 1000000007;
 ll INF = 1000000009;
 
 void solve(){
-    int n;
+    ll n;
     cin >> n;
     bool b[n+10][n+10];
-    vector<int> v[n+10];
+    vector<ll> v[n+10];
     //v[i]:頂点iから辺が伸びている頂点の集合
     rep(i,n){
         string s;
@@ -32,17 +32,17 @@ void solve(){
     }
     */
     
-    int ans = -1;
+    ll ans = -1;
     rep(i,n){
-        int d[n+10];
+        ll d[n+10];
         bool visited[n+10];
         fill(d,d+n+10,0);
         fill(visited,visited+n+10,false);
         visited[i]=true;
-        stack<int> st;
-        st.push((int)i);
+        queue<ll> st;
+        st.push(i);
         while(!st.empty()){
-            int tmp = st.top();
+            ll tmp = st.front();
             st.pop();
             for(auto j:v[tmp]){
                 if(!visited[j]){
@@ -61,7 +61,7 @@ void solve(){
                 }
             }
         }
-        int m = 0;
+        ll m = 0;
         rep(j,n){
             //cout << "d[" << j << "]:" << d[j] << endl;
             m = max(m,d[j]);
