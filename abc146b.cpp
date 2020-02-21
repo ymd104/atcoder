@@ -15,16 +15,17 @@ ll INF = 1000000009;
 
 void solve(){
 
+    int n;
+    cin >> n;
+
     string s;
     cin >> s;
 
-    if(s == "SUN") cout << 7 << endl;
-    if(s == "MON") cout << 6 << endl;
-    if(s == "TUE") cout << 5 << endl;
-    if(s == "WED") cout << 4 << endl;
-    if(s == "THU") cout << 3 << endl;
-    if(s == "FRI") cout << 2 << endl;
-    if(s == "SAT") cout << 1 << endl;
+    rep(i,s.length()){
+        s[i] = (s[i] + n - 'A')%26 + 'A';
+    }
+
+    cout << s << endl;
     
 
 }
