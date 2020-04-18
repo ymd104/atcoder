@@ -1,45 +1,61 @@
-#include <iostream>
+#include <bits/stdc++.h>
+
+#define pb push_back
+#define ss second
+#define ff first
+#define N 1000006
+#define inf 1000000009
+#define ll long long
+#define mid(a,b) (a+b)/2
+#define pii pair<int,int>
+
 using namespace std;
-template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
-template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
-const long long INF = 1LL<<60;
 
-const int MAX_N = 110;
-const int MAX_V = 100100;
+const int mod = 1e9+7;
+int a[N],lc[N],x,cnt,n;
+ll ans,jog,l;
+bool b[N];
+vector <int> v;
 
-// 入力
-int N;
-long long W, weight[MAX_N], value[MAX_N]; // 品物の個数は 100 個なので少し余裕持たせてサイズ 110 に
+ll pw(ll a,ll b){
+	if(b == 0) return 1;
+	ll x = pw(a,b / 2);
+	if(b % 2) return (((x * x) % mod)*a)%mod;
+	return (x * x) % mod;
+}
 
-// DPテーブル
-long long dp[MAX_N][MAX_V];
+int main()
+{
+	scanf("%d",&n);
+	for(int i = 1;i <= n;i++){
+		scanf("%d",&a[i]);
+		x = a[i];
 
-int main() {
-    cin >> N >> W;
-    for (int i = 0; i < N; ++i) cin >> weight[i] >> value[i];
+		for(int j = 2;j * j <= x;j++){
+			cnt = 0;
+			while(x % j == 0){
+				cnt++;
+				x /= j;
+			}
+			lc[j] = max(lc[j],cnt);
+		}
 
-    // 初期化
-    for (int i = 0; i < MAX_N; ++i) for (int j = 0; j < MAX_V; ++j) dp[i][j] = INF;
+		if(x > 1 and lc[x] == 0) lc[x] = 1;
+	}
 
-    // 初期条件
-    dp[0][0] = 0;
+  for(int i=0;i<4;i++){
+    cout << i << ":" << lc[i] << endl;
+  }
+  //lc[i]:lcmのiの因数の数
 
-    // DPループ
-    for (int i = 0; i < N; ++i) {
-        for (int sum_v = 0; sum_v < MAX_V; ++sum_v) {
-
-            // i 番目の品物を選ぶ場合
-            if (sum_v - value[i] >= 0) chmin(dp[i+1][sum_v], dp[i][sum_v - value[i]] + weight[i]);
-
-            // i 番目の品物を選ばない場合
-            chmin(dp[i+1][sum_v], dp[i][sum_v]);
-        }
-    }
-
-    // 最適値の出力
-    long long res = 0;
-    for (int sum_v = 0; sum_v < MAX_V; ++sum_v) {
-        if (dp[N][sum_v] <= W) res = sum_v;
-    }
-    cout << res << endl;
+	l = 1;
+	for(int i = 2;i <= 1e6;i++){
+		if(lc[i]) l = (l * pw(i,lc[i])) % mod;
+    //lcmを計算している
+  }
+	for(int i = 1;i <= n;i++){
+		ans = (ans + (l * pw(a[i],mod - 2)) % mod) % mod;
+    // lcm/a[i] == lcm×a[i]^(mod-2)らしい　なぜ?
+	}
+	printf("%lld",ans);
 }
