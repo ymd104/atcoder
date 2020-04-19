@@ -1,6 +1,6 @@
-int gcd( int a, int b )
+ll gcd( ll a, ll b )
 {
-    int temp;
+    ll temp;
 
     if( a < b ) { temp = a; a = b; b = temp; }
     if( b < 1 ) return -1;

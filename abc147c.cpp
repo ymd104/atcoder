@@ -54,6 +54,7 @@ void solve(){
     for(int bit=0; bit<(1<<n); bit++){
         int tmpans = 0;
         t(bit);
+        
         /*
         rep(i,n){
             if(b[i]) cout << 1;
@@ -61,9 +62,11 @@ void solve(){
         }
         cout << endl;
         */
+        
         //b[j]:j番目の人が正直か嘘つきか
         bool is = true;
         rep(j,n){
+            if(b[j]==false) continue;
             auto vtmp = v[j];
             rep(k,vtmp.size()){
                 int x,y;

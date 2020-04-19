@@ -1,56 +1,85 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define rep(i,n) for(ll i=0; i<n; i++)
+#define eb(t) emplace_back(t)
 typedef long long ll;
 typedef long long unsigned int llu;
 ll MOD = 1000000007;
-ll INF = 1e9+1;
+ll INF = 1000000009;
 
-/*
-dpab[i]:先頭からi文字目までのabの数
-dpa[i]:先頭からi文字目までのaの数
-
-dpa[0]= s[0]=='A'or'?'のとき1　それ以外は0
-dpab[0]=0
-
-dpa[i]= s[i]=='A'or'?'のときdpa[i-1]+1　それ以外はdpa[i-1]
-dpab[i]= s[i]=='B'or'?'のときdpa[i-1]+1 それ以外はdpab[i-1]
-文字列を頭からみていって、s[i]=='C'or'?'のときans = (ans + dpab[i-1]) % MOD
-*/
-
-ll dpa[100010];
-ll dpab[100010];
+ll dp[100010][4];
 
 void solve(){
+
     string s;
     cin >> s;
-    ll n = s.size();
-    fill(dpa,dpa+n+10,0);
-    fill(dpab,dpab+n+10,0);
-    ll ans = 0;
-    dpa[0] = s[0]=='A'||s[0]=='?'? 1:0;
-    for(ll i=1; i<n; i++){
-        if(s[i]=='A'||s[i]=='?') dpa[i]=(dpa[i-1]+1)%MOD;
-        else dpa[i]=dpa[i-1];
+    ll n = s.length();
+    dp[n][3]=1;
+    rep(j,3){
+        dp[n][j]=0;
+    }
+    for(ll i=n-1; i>=0; i--){
+        dp[i][3]=(dp[i+1][3]*(s[i]=='?'? 3:1))%MOD;
+    }
+    for(ll i=n-1; i>=0; i--){
+        ll m1,m2;
+        if(s[i]=='?') {
+            m1 = 3;
+            m2 = 1;
+        }
+        else if(s[i]=='C') {
+            m1 = 1;
+            m2 = 1;
+        }
+        else {
+            m1 = 1;
+            m2 = 0;
+        }
+        dp[i][2]=(m1 * dp[i+1][2] + m2 * dp[i+1][3])%MOD;
+    }
+    for(ll i=n-1; i>=0; i--){
+        ll m1,m2;
+        if(s[i]=='?') {
+            m1 = 3;
+            m2 = 1;
+        }
+        else if(s[i]=='B') {
+            m1 = 1;
+            m2 = 1;
+        }
+        else {
+            m1 = 1;
+            m2 = 0;
+        }
+        dp[i][1]=(m1 * dp[i+1][1] + m2 * dp[i+1][2])%MOD;
+    }
+    for(ll i=n-1; i>=0; i--){
+        ll m1,m2;
+        if(s[i]=='?') {
+            m1 = 3;
+            m2 = 1;
+        }
+        else if(s[i]=='A') {
+            m1 = 1;
+            m2 = 1;
+        }
+        else {
+            m1 = 1;
+            m2 = 0;
+        }
+        dp[i][0]=(m1 * dp[i+1][0] + m2 * dp[i+1][1])%MOD;
     }
 
-    for(ll i=1; i<n; i++){
-        if(s[i]=='B'||s[i]=='?') dpab[i]=(dpab[i-1]+dpa[i-1])%MOD;
-        else dpab[i]=dpab[i-1];
+    /*
+    rep(j,4){
+        rep(i,n){
+            cout << dp[i][3-j] << " ";
+        }
+        cout << endl;
     }
-
-    rep(i,n){
-        if(s[i]=='?') ans = (ans*3) % MOD;
-        if(s[i]=='C'||s[i]=='?') ans = (ans + dpab[i-1]) % MOD;
-    }
-
-    rep(i,n){
-        cout << "dpa[" << i << "]:" << dpa[i] << endl;
-    }
-    rep(i,n){
-        cout << "dpab[" << i << "]:" << dpab[i] << endl;
-    }
-    cout << ans << endl;
+    */
+    
+    cout << dp[0][0] << endl;
 
 }
 
